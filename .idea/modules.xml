@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/data-science-scratch-2e.iml" filepath="$PROJECT_DIR$/.idea/data-science-scratch-2e.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/dsfs-2e.iml" filepath="$PROJECT_DIR$/.idea/dsfs-2e.iml" />
     </modules>
   </component>
 </project>
