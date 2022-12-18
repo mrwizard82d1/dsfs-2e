@@ -4,7 +4,7 @@ Define what we need to support linear algebra 'from scratch'.
 This code is not production code but is useful for teaching.
 """
 
-import functools
+import math
 from numbers import Real
 from typing import List
 
@@ -44,14 +44,66 @@ def zero(rank: int) -> Vector:
 
 def vector_sum(vs: List[Vector]) -> Vector:
     """Sum a `list` of `Vector`s, `vs` producing a new vector."""
-    # The sum of an empty list is undefinedi
+    # The sum of an empty list is undefined
     assert len(vs) != 0
 
     # Cannot sum vectors of different ranks
-    length_of_first_vector = len(vs[0])
-    assert all([len(v) == length_of_first_vector for v in vs])
+    rank = len(vs[0])
+    assert all([len(v) == rank for v in vs])
 
-    return functools.reduce(lambda item, so_far: add(so_far, item), vs, zero(length_of_first_vector))
+    return [sum(v[i] for v in vs) for i in range(rank)]
+    # Equivalent to the following. Perhaps clearer.
+    # return functools.reduce(lambda item, so_far: add(so_far, item), vs, zero(rank))
 
 
-assert vector_sum([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == [12, 15, 18]
+assert vector_sum([[1, 2], [3, 4], [5, 6], [7, 8]]) == [16, 20]
+
+
+def scalar_multiply(c: Real, v: Vector) -> Vector:
+    """Multiply vector, `v`, by the scalar, `c` producing another vector"""
+    return [c * v_i for v_i in v]
+
+
+assert scalar_multiply(2, [1, 2, 3]) == [2, 4, 6]
+
+
+# Defining `scalar_multiply` allows us to calculate a component-wise mean of vectors of the same rank
+def vector_mean(vs: List[Vector]) -> Vector:
+    """Calculate the 'component-wise' mean of a `list` of vectors"""
+    return scalar_multiply(1 / len(vs), vector_sum(vs))
+
+
+assert vector_mean([[1, 2], [3, 4], [5, 6]]) == [3, 4]
+
+
+def dot(v: Vector, w: Vector) -> Real:
+    """Calculate the dot product of two vectors, `v` and `w`"""
+
+    return sum(v_i * w_i for v_i, w_i in zip(v, w))
+
+
+assert dot([1, 2, 3], [4, 5, 6]) == 32
+
+
+def sum_of_squares(v: Vector) -> Real:
+    """Calculate the component-wise sum of squaries of vector, `v`"""
+    return dot(v, v)
+
+
+assert sum_of_squares([1, 2, 3]) == 14
+
+
+def magnitude(v: Vector) -> Real:
+    """Calculate the magnitude of the vector, `v`"""
+    return math.sqrt(sum_of_squares(v))
+
+
+assert magnitude([3, 4]) == 5
+
+
+def distance(v: Vector, w: Vector) -> Real:
+    """Calculate the distance between two vectors, `v` and `w`"""
+    return magnitude(subtract(v, w))
+
+
+assert distance([4, 6], [1, 2]) == 5
