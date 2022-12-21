@@ -1,12 +1,12 @@
 """
 Define what we need to support linear algebra 'from scratch'.
 
-This code is not production code but is useful for teaching.
+This code is not production code but is useful for teaching. In production code, you want to use the `numpy` package.
 """
 
 import math
 from numbers import Real
-from typing import List
+from typing import List, Tuple
 
 # A vector is just a list of real numbers. Using the `Real` type includes
 # - int
@@ -107,3 +107,45 @@ def distance(v: Vector, w: Vector) -> Real:
 
 
 assert distance([4, 6], [1, 2]) == 5
+
+
+# A matrix is just a list of identically sized lists of real numbers. Using the `Real` type includes
+# - int
+# - float
+# - fraction.Fraction
+# - decimal.Decimal
+Matrix = List[List[Real]]
+
+# Per mathematical convention, we frequently use capital letters to represent matrices.
+A = [[1, 2, 3],  # A has 2 rows
+     [4, 5, 6]]  # and 3 columns
+
+B = [[1, 2],  # B has 3 rows
+     [3, 4],  # and 2 columns
+     [5, 6]]
+
+# Although in mathematics, we number rows and columns of matrices beginning with 1. Because we are using Python, we use
+# the Python convention beginning with 0 (zero).
+
+# The shape of a (2-D) matrix is a pair of `int` values returned as a `tuple`. The first item in the `tuple` is the
+# number of rows; the second item in the `tuple` is the number of columns.
+
+
+# noinspection PyPep8Naming,PyShadowingNames
+def shape(A: Matrix) -> Tuple[int, int]:
+    """Return the shape (rank) of the matrix, `A`, as a `tuple` of row count x column count.
+
+    If `A` is an empty matrix, return the `tuple`, (0, 0).
+    """
+    return len(A), len(A[0]) if A else 0
+
+
+assert shape([[1, 2]]) == (1, 2)
+assert shape([[1, 2, 3],
+              [4, 5, 6]]) == (2, 3)
+assert shape([[1, 2],
+              [3, 4],
+              [5, 6]]) == (3, 2)
+assert shape([[1]]) == (1, 1)
+assert shape([]) == (0, 0)
+assert shape([[]]) == (1, 0)
