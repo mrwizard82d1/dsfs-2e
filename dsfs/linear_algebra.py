@@ -6,7 +6,7 @@ This code is not production code but is useful for teaching. In production code,
 
 import math
 from numbers import Real
-from typing import List, Tuple
+from typing import Callable, List, Tuple
 
 # A vector is just a list of real numbers. Using the `Real` type includes
 # - int
@@ -98,7 +98,7 @@ B = [[1, 2],  # B has 3 rows
      [5, 6]]
 
 # Although in mathematics, we number rows and columns of matrices beginning with 1. Because we are using Python, we use
-# the Python convention beginning with 0 (zero).
+# the Python convention beginning with 0 (z).
 
 # The shape of a (2-D) matrix is a pair of `int` values returned as a `tuple`. The first item in the `tuple` is the
 # number of rows; the second item in the `tuple` is the number of columns.
@@ -111,3 +111,53 @@ def shape(A: Matrix) -> Tuple[int, int]:
     If `A` is an empty matrix, return the `tuple`, (0, 0).
     """
     return len(A), len(A[0]) if A else 0
+
+
+# noinspection PyPep8Naming,PyShadowingNames
+def row(A: Matrix, j: int) -> Vector:
+    """Return the `j`th row of the matrix, `A`, as a vector.
+
+    We sometimes think of a j x k matrix as composed of j row vectors or of k column vectors.
+    """
+    return A[j]
+
+
+# noinspection PyPep8Naming,PyShadowingNames
+def column(A: Matrix, k: int) -> Vector:
+    """Return the `k`th column of the matrix, `A`, as a vector.
+
+    We sometimes think of a j x k matrix as composed of j row vectors or of k column vectors.
+    """
+    return [A_j[k] for A_j in A]
+
+
+def make_matrix(row_count: int,
+                column_count: int,
+                entry_fn: Callable[[int, int], Real]) -> Matrix:
+    """Returns a `row_count` x `column_count` matrix whose (j, k) element is initialized with `entry_fn(j, k)`"""
+    return [[entry_fn(j, k) for k in range(column_count)] for j in range(row_count)]
+
+
+def identity_matrix(n: int) -> Matrix:
+    """Returns an n x n identity matrix."""
+    return make_matrix(n, n, lambda j, k: 1 if j == k else 0)
+
+
+def zero_matrix(j: int, k: int) -> Matrix:
+    """Return a j x k matrix all of whose elements are zero."""
+    return make_matrix(j, k, lambda _j, _k: 0)
+
+
+# One can use a matrix to represent "network connections" like we did with the `friendships` value previously. This
+# representation is not really efficient for a "sparse" graph, but it is efficient for a dense matrix.
+#            user 0  1  2  3  4  5  6  7  8  9
+friend_matrix = [[0, 1, 1, 0, 0, 0, 0, 0, 0, 0],  # user 0
+                 [1, 0, 1, 1, 0, 0, 0, 0, 0, 0],  # user 1
+                 [1, 1, 0, 1, 0, 0, 0, 0, 0, 0],  # user 2
+                 [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],  # user 3
+                 [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],  # user 4
+                 [0, 0, 0, 0, 1, 0, 1, 1, 0, 0],  # user 5
+                 [0, 0, 0, 0, 0, 1, 0, 0, 1, 0],  # user 6
+                 [0, 0, 0, 0, 0, 1, 0, 0, 1, 0],  # user 7
+                 [0, 0, 0, 0, 0, 0, 1, 1, 0, 1],  # user 8
+                 [0, 0, 0, 0, 0, 0, 0, 0, 1, 0]]  # user 9
