@@ -23,17 +23,11 @@ def add(v: Vector, w: Vector) -> Vector:
     return [v_i + w_i for v_i, w_i in zip(v, w)]
 
 
-assert add([1, 2, 3], [4, 5, 6]) == [5, 7, 9]
-
-
 def subtract(v: Vector, w: Vector) -> Vector:
     """Subtract vector `w` from vector `v` producing a third vector."""
     assert len(v) == len(w)  # Cannot subtract Vectors of different rank
 
     return [v_i - w_i for v_i, w_i in zip(v, w)]
-
-
-assert subtract([5, 7, 9], [4, 5, 6]) == [1, 2, 3]
 
 
 def zero(rank: int) -> Vector:
@@ -56,15 +50,9 @@ def vector_sum(vs: List[Vector]) -> Vector:
     # return functools.reduce(lambda item, so_far: add(so_far, item), vs, zero(rank))
 
 
-assert vector_sum([[1, 2], [3, 4], [5, 6], [7, 8]]) == [16, 20]
-
-
 def scalar_multiply(c: Real, v: Vector) -> Vector:
     """Multiply vector, `v`, by the scalar, `c` producing another vector"""
     return [c * v_i for v_i in v]
-
-
-assert scalar_multiply(2, [1, 2, 3]) == [2, 4, 6]
 
 
 # Defining `scalar_multiply` allows us to calculate a component-wise mean of vectors of the same rank
@@ -73,24 +61,15 @@ def vector_mean(vs: List[Vector]) -> Vector:
     return scalar_multiply(1 / len(vs), vector_sum(vs))
 
 
-assert vector_mean([[1, 2], [3, 4], [5, 6]]) == [3, 4]
-
-
 def dot(v: Vector, w: Vector) -> Real:
     """Calculate the dot product of two vectors, `v` and `w`"""
 
     return sum(v_i * w_i for v_i, w_i in zip(v, w))
 
 
-assert dot([1, 2, 3], [4, 5, 6]) == 32
-
-
 def sum_of_squares(v: Vector) -> Real:
-    """Calculate the component-wise sum of squaries of vector, `v`"""
+    """Calculate the component wise sum of squares of vector, `v`"""
     return dot(v, v)
-
-
-assert sum_of_squares([1, 2, 3]) == 14
 
 
 def magnitude(v: Vector) -> Real:
@@ -98,15 +77,9 @@ def magnitude(v: Vector) -> Real:
     return math.sqrt(sum_of_squares(v))
 
 
-assert magnitude([3, 4]) == 5
-
-
 def distance(v: Vector, w: Vector) -> Real:
     """Calculate the distance between two vectors, `v` and `w`"""
     return magnitude(subtract(v, w))
-
-
-assert distance([4, 6], [1, 2]) == 5
 
 
 # A matrix is just a list of identically sized lists of real numbers. Using the `Real` type includes
@@ -138,14 +111,3 @@ def shape(A: Matrix) -> Tuple[int, int]:
     If `A` is an empty matrix, return the `tuple`, (0, 0).
     """
     return len(A), len(A[0]) if A else 0
-
-
-assert shape([[1, 2]]) == (1, 2)
-assert shape([[1, 2, 3],
-              [4, 5, 6]]) == (2, 3)
-assert shape([[1, 2],
-              [3, 4],
-              [5, 6]]) == (3, 2)
-assert shape([[1]]) == (1, 1)
-assert shape([]) == (0, 0)
-assert shape([[]]) == (1, 0)
