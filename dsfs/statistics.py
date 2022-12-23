@@ -24,3 +24,9 @@ def median(xs: List[Real]) -> Real:
 
     sorted_xs = sorted(xs)
     return median_even(sorted_xs) if len(sorted_xs) % 2 == 0 else median_odd(sorted_xs)
+
+
+def quantile(xs: List[Real], p: Real) -> Real:
+    """Calculate the value under which the fraction, `p`, of the data lie."""
+    p_index = int(p * len(xs))  # The index of the `p`-th fraction of all the data
+    return sorted(xs)[p_index]

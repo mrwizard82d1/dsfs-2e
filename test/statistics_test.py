@@ -14,7 +14,7 @@ test_num_friends = [100, 49, 41, 40, 25, 21, 21, 19, 19, 18, 18, 16, 15, 15, 15,
 
 
 def test_mean():
-    assert 7.333332 < scratch.statistics.mean(test_num_friends) < 7.333334
+    assert 7.333332 < float(scratch.statistics.mean(test_num_friends) )< 7.333334
 
 
 @pytest.mark.parametrize(
@@ -29,3 +29,17 @@ def test_mean():
 )
 def test_median(data, expected):
     assert scratch.statistics.median(data) == expected
+
+
+@pytest.mark.parametrize(
+    'p,expected',
+    [
+        (0.10, 1),
+        (0.25, 3),
+        (0.50, 6),
+        (0.75, 9),
+        (0.90, 13),
+    ]
+)
+def test_quantile(p, expected):
+    assert scratch.statistics.quantile(test_num_friends, p) == expected
