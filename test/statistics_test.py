@@ -23,7 +23,8 @@ def test_mean():
         ((1, 2, 3, 4, 5), 3),
         ((1, 2, 3, 4, 5, 6), 3.5),
         ((1, 10, 2, 9, 5), 5),
-        ((9, 1, 10, 2), (2 + 9) / 2)  # because the floating point value involves 0.5, we can use an exact comparison
+        ((9, 1, 10, 2), (2 + 9) / 2),  # because the floating point value involves 0.5, we can use an exact comparison
+        (test_num_friends, 6)
     ]
 )
 def test_median(data, expected):
