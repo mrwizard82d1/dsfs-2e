@@ -43,3 +43,17 @@ def test_median(data, expected):
 )
 def test_quantile(p, expected):
     assert scratch.statistics.quantile(test_num_friends, p) == expected
+
+
+@pytest.mark.parametrize(
+    'data,expected',
+    [
+        ([], set()),
+        ([3], {3}),
+        ([3, 1, 4, 1, 5, 9], {1}),
+        ([2, 7, 1, 8, 2, 7, 1, 8], {2, 7, 1, 8}),
+        (test_num_friends, {1, 6})
+    ]
+)
+def test_mode(data, expected):
+    assert scratch.statistics.mode(data) == expected
