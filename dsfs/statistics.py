@@ -8,8 +8,15 @@ the `scipy` package.
 """
 
 from collections import Counter
+import math
 from numbers import Real
 from typing import List, Set
+
+
+import dsfs as scratch
+
+
+# Statistics measuring central tendency.
 
 
 def mean(xs: List[Real]) -> Real:
@@ -46,3 +53,39 @@ def mode(xs: List[Real]) -> Set[Real]:
     counts = Counter(xs)
     max_counts = max(counts.values())
     return {x_i for x_i, count in counts.items() if count == max_counts}
+
+
+# Statistics measuring dispersion of the data.
+
+
+def data_range(xs: List[Real]) -> Real:
+    """Calculate the range of the data."""
+    return max(xs) - min(xs)
+
+
+def variance(xs: List[Real]) -> Real:
+    """Calculate the variance of the data, `xs`"""
+    def normalize_to_mean(ys):
+        """Normalize each item in `ys` relative to the mean of `ys`"""
+        y_bar = mean(ys)
+        return [y - y_bar for y in ys]
+
+    assert len(xs) >= 2, 'Variance requires at least two items.'
+
+    n = len(xs)
+    normalized = normalize_to_mean(xs)
+    # Subtract one from `n` because this is a sample of a population so the mean of `normalized` is an
+    # **underestimate** of the deviation from the mean. See
+    # [this Wikipedia article](https://en.wikipedia.org/wiki/Unbiased_estimation_of_standard_deviation).
+    result = scratch.linear_algebra.sum_of_squares(normalized) / (n - 1)
+    return result
+
+
+def standard_deviation(xs: List[Real]) -> float:
+    """Calculate the standard deviation of the data, `xs`."""
+    return math.sqrt(variance(xs))
+
+
+def interquartile_range(xs: List[Real]) -> Real:
+    """The difference between the value of the `xs` at the 75th and the 25th percentile."""
+    return quantile(xs, 0.75) - quantile(xs, 0.25)

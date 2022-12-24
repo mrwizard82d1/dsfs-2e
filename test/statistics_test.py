@@ -1,3 +1,5 @@
+import math
+
 import pytest
 
 import dsfs as scratch
@@ -57,3 +59,52 @@ def test_quantile(p, expected):
 )
 def test_mode(data, expected):
     assert scratch.statistics.mode(data) == expected
+
+
+@pytest.mark.parametrize(
+    'data,expected',
+    [
+        ([3], 0),
+        ([3, 1, 4, 1, 5, 9], 8),
+        (test_num_friends, 99)
+    ]
+)
+def test_data_range(data, expected):
+    assert scratch.statistics.data_range(data) == expected
+
+
+@pytest.mark.parametrize(
+    'data, expected',
+    [
+        ([0] * 50 + [100] * 50, (50 ** 2 * 100) / (100 - 1)),
+        ([0] + [50] * 98 + [100], (50 ** 2 * 2) / (100 - 1)),
+        (test_num_friends, 81.5435)
+    ]
+)
+def test_variance(data, expected):
+    assert float(scratch.statistics.variance(data)) == pytest.approx(expected)
+
+
+@pytest.mark.parametrize(
+    'data, expected',
+    [
+        ([0] * 50 + [100] * 50, math.sqrt((50 ** 2 * 100) / (100 - 1))),
+        ([0] + [50] * 98 + [100], math.sqrt((50 ** 2 * 2) / (100 - 1))),
+        (test_num_friends, math.sqrt(81.5435))
+    ]
+)
+def test_standard_deviation(data, expected):
+    assert float(scratch.statistics.standard_deviation(data)) == pytest.approx(expected)
+
+
+@pytest.mark.parametrize(
+    'data, expected',
+    [
+        ([0] * 50 + [100] * 50, 100),
+        ([0] + [50] * 98 + [100], 0),
+        (test_num_friends, 6),
+        ([200] + test_num_friends[1:], 6)
+    ]
+)
+def test_interquartile_range(data, expected):
+    assert float(scratch.statistics.interquartile_range(data)) == pytest.approx(expected)
