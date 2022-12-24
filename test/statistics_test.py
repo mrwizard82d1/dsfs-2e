@@ -130,9 +130,6 @@ def test_interquartile_range(data, expected):
     assert float(scratch.statistics.interquartile_range(data)) == pytest.approx(expected)
 
 
-# Correlation
-
-
 @pytest.mark.parametrize(
     'left_data, right_data, expected, abs_tol',
     [
@@ -143,4 +140,19 @@ def test_interquartile_range(data, expected):
     ]
 )
 def test_covariance(left_data, right_data, expected, abs_tol):
-    assert float(scratch.statistics.covariance(left_data, right_data)) == pytest.approx(expected, abs_tol)
+    assert float(scratch.statistics.covariance(left_data, right_data)) == pytest.approx(expected, abs=abs_tol)
+
+
+@pytest.mark.parametrize(
+    'left_data, right_data, expected, abs_tol',
+    [
+        ([3, 1, 4, 1, 5, 9], [3, 1, 4, 1, 5, 9], 1, None),
+        ([3, 1, 4, 1, 5, 9], [-3, -1, -4, -1, -5, -9], -1, None),
+        (test_num_friends, test_daily_minutes, 0.24, 9e-03),
+        (test_num_friends, test_daily_hours, 0.24, 9e-03),
+        ([1, 1, 1], [3, 1, 4], 0, None),
+        ([3, 1, 4], [1, 1, 1], 0, None),
+    ]
+)
+def test_correlation(left_data, right_data, expected, abs_tol):
+    assert float(scratch.statistics.correlation(left_data, right_data)) == pytest.approx(expected, abs=abs_tol)

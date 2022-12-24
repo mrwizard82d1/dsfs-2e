@@ -105,3 +105,15 @@ def covariance(xs: List[Real], ys: List[Real]) -> Real:
     result = scratch.linear_algebra.dot(mean_centered_xs, mean_centered_ys) / (len(xs) - 1)
     return result
 
+
+def correlation(xs: List[Real], ys: List[Real]) -> Real:
+    """Calculate the correlation of two two data 'sets', `xs` and `ys`"""
+    assert len(xs) == len(ys), 'Correlation only defined on sequences of the same length'
+
+    stddev_x = standard_deviation(xs)
+    stddev_y = standard_deviation(ys)
+    if stddev_x > 0 and stddev_y > 0:
+        return covariance(xs, ys) / (stddev_x * stddev_y)
+    else:
+        # By definition, if either standard deviation is zero, the sequences **do not** correlate
+        return 0
