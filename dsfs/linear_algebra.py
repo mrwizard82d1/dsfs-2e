@@ -63,6 +63,7 @@ def vector_mean(vs: List[Vector]) -> Vector:
 
 def dot(v: Vector, w: Vector) -> Real:
     """Calculate the dot product of two vectors, `v` and `w`"""
+    assert len(v) == len(w), 'Dot product only defined on Vectors of the same rank'
 
     return sum(v_i * w_i for v_i, w_i in zip(v, w))
 

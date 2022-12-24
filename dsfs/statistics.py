@@ -63,17 +63,19 @@ def data_range(xs: List[Real]) -> Real:
     return max(xs) - min(xs)
 
 
+def _mean_centering(ys):
+    """Normalize each item in `ys` relative to the mean of `ys`"""
+    y_bar = mean(ys)
+    return [y - y_bar for y in ys]
+
+
 def variance(xs: List[Real]) -> Real:
     """Calculate the variance of the data, `xs`"""
-    def normalize_to_mean(ys):
-        """Normalize each item in `ys` relative to the mean of `ys`"""
-        y_bar = mean(ys)
-        return [y - y_bar for y in ys]
 
     assert len(xs) >= 2, 'Variance requires at least two items.'
 
     n = len(xs)
-    normalized = normalize_to_mean(xs)
+    normalized = _mean_centering(xs)
     # Subtract one from `n` because this is a sample of a population so the mean of `normalized` is an
     # **underestimate** of the deviation from the mean. See
     # [this Wikipedia article](https://en.wikipedia.org/wiki/Unbiased_estimation_of_standard_deviation).
@@ -89,3 +91,17 @@ def standard_deviation(xs: List[Real]) -> float:
 def interquartile_range(xs: List[Real]) -> Real:
     """The difference between the value of the `xs` at the 75th and the 25th percentile."""
     return quantile(xs, 0.75) - quantile(xs, 0.25)
+
+
+def covariance(xs: List[Real], ys: List[Real]) -> Real:
+    """Calculate the covariance of two two data 'sets', `xs` and `ys`"""
+    assert len(xs) == len(ys), 'Covariance only defined on sequences of the same length'
+
+    # Center each data sequence on its mean
+    mean_centered_xs = _mean_centering(xs)
+    mean_centered_ys = _mean_centering(ys)
+
+    # Average the dot product of the data sequences using the unbiased length
+    result = scratch.linear_algebra.dot(mean_centered_xs, mean_centered_ys) / (len(xs) - 1)
+    return result
+
