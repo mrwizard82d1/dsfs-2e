@@ -1,4 +1,5 @@
 import math
+import random
 
 
 def uniform_pdf(x: float) -> float:
@@ -62,3 +63,13 @@ def inverse_normal_cdf(p: float,
 
     # Since we've exited the loop, the range [hi_z, lo_z] is within the tolerance so return the midpoint
     return mid_z
+
+
+def bernoulli_trial(p: float) -> int:
+    """Perform a Bernoulli trial generating 1 with probability, `p`, and 0 with probability, `1 - p`"""
+    return 1 if random.random() < p else 0
+
+
+def binomial(n: int, p: float) -> int:
+    """Returns the sum of `n` Bernoulli trials each with probability, `p`"""
+    return sum(bernoulli_trial(p) for _ in range(n))
