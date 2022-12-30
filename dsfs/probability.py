@@ -31,3 +31,34 @@ def normal_pdf(x: float, mu: float = 0, sigma: float = 1) -> float:
 def normal_cdf(x: float, mu: float = 0, sigma: float = 1) -> float:
     """Calculate the probability that a random variable distributed as N(`mu`, `sigma`) is less than or equal to `x`"""
     return (1 + math.erf((x - mu) / (math.sqrt(2) * sigma))) / 2
+
+
+def inverse_normal_cdf(p: float,
+                       mu: float = 0,
+                       sigma: float = 1,
+                       tolerance: float = 1e-5) -> float:
+    """Calculate the approximate inverse of the normal CDF.
+
+    The inverse of the normal CDF has no closed form solution even though approximations using infinite series and
+    continued fractions do exist. We implement this **computer** function by performing a binary search of the normal
+    CDF function for the value of interest.
+    """
+    # If the distribution is not standard (mean = 0, standard deviation = 1), transform it to standard.
+    if mu != 0 or sigma != 1:
+        return mu + sigma * inverse_normal_cdf(p, tolerance=tolerance)
+
+    # normal_cdf(-10) ~= 0; normal_cdf(10) ~= 1
+    lo_z = -10
+    hi_z = 10
+    mid_z = (hi_z + lo_z) / 2  # initialize the midpoint so it always has a value (edge case)
+    # while the range [hi_z, lo_z] is larger than the tolerance
+    while hi_z - lo_z > tolerance:
+        mid_z = (hi_z + lo_z) / 2  # calculate the midpoint
+        mid_p = normal_cdf(mid_z)  # test the CDF at the midpoint
+        if mid_p < p:  # if midpoint is less than the desired probability
+            lo_z = mid_z  # the midpoint is too low; search above it
+        else:
+            hi_z = mid_z  # the midpoint is too high; search below it
+
+    # Since we've exited the loop, the range [hi_z, lo_z] is within the tolerance so return the midpoint
+    return mid_z

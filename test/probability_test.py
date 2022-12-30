@@ -63,3 +63,24 @@ def test_normal_pdf(mu, sigma, x, expected):
 )
 def test_normal_cdf(mu, sigma, p, expected):
     assert scratch.probability.normal_cdf(p, mu=mu, sigma=sigma) == pytest.approx(expected, abs=1e-6)
+
+
+@pytest.mark.parametrize(
+    'p, mu, sigma, p_tolerance, expected, e_tolerance',
+    [
+        (0.5, 0, 1, 1e-6, 0, 1e-6),
+        (0.997, 0, 1, 1e-7, 2.7477814, 1e-7),
+        (0.002, 0, 1, 1e-5, -2.87816, 1e-5),
+        (0.45, 0, 2, 1e-9, -0.251322694, 1e-9),
+        (0.45, 0, 0.5, 1e-3, -0.063, 1e-3),
+        (0.884, -1, 1, 1e-2, 0.20, 1e-2),
+    ]
+)
+def test_inverse_normal_cdf(p: float,
+                            mu: float,
+                            sigma: float,
+                            p_tolerance: float,
+                            expected: float,
+                            e_tolerance):
+    assert scratch.probability.inverse_normal_cdf(p, mu, sigma, p_tolerance) == pytest.approx(expected,
+                                                                                              abs=e_tolerance)
