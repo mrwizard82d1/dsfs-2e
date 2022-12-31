@@ -58,3 +58,51 @@ def test_normal_probability_between(lo, hi, expected, abs_tol):
 )
 def test_normal_probability_outside(lo, hi, expected, abs_tol):
     assert scratch.inference.normal_probability_outside(lo, hi) == pytest.approx(expected, abs=abs_tol)
+
+
+@pytest.mark.parametrize(
+    'p, expected, abs_tol',
+    [
+        (0.99865, 3.00000, 2e-5),
+        (0.5, 0, 1e-5),
+        (0.159, -1, 2e-3),
+    ]
+)
+def test_normal_upper_bound(p, expected, abs_tol):
+    assert scratch.inference.normal_upper_bound(p) == pytest.approx(expected, abs=abs_tol)
+
+
+@pytest.mark.parametrize(
+    'p, expected, abs_tol',
+    [
+        (0.00135, 3.00000, 2e-5),
+        (0.5, 0, 1e-5),
+        (0.841, -1, 2e-3),
+    ]
+)
+def test_normal_lower_bound(p, expected, abs_tol):
+    assert scratch.inference.normal_lower_bound(p) == pytest.approx(expected, abs=abs_tol)
+
+
+@pytest.mark.parametrize(
+    'p, expected, abs_tol',
+    [
+        (0.00135, 3.00000, 2e-5),
+        (0.5, 0, 1e-5),
+        (0.841, -1, 2e-3),
+    ]
+)
+def test_normal_lower_bound(p, expected, abs_tol):
+    assert scratch.inference.normal_lower_bound(p) == pytest.approx(expected, abs=abs_tol)
+
+
+@pytest.mark.parametrize(
+    'probability, expected, abs_tol',
+    [
+        (0.68269, (-1, 1), 1e-5),
+        (0.9545, (-2, 2), 1e-4),
+        (0.997, (-3, 3), 4e-2),
+    ]
+)
+def test_normal_two_sided_bounds(probability, expected, abs_tol):
+    assert scratch.inference.normal_two_sided_bounds(probability) == pytest.approx(expected, abs=abs_tol)
