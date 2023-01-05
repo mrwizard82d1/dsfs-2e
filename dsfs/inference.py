@@ -20,8 +20,11 @@ def normal_approximation_to_binomial(n: int, p: float) -> NormalDistributionPara
 # its realized value lies within or outside a particular interval.
 
 
-"""The normal CDF **is** the probability that a random variable is **below** a threshold."""
-normal_probability_below = dp.normal_cdf
+def normal_probability_below(hi: float,
+                             mu: float = 0,
+                             sigma: float = 1) -> float:
+    """Calculate the probability from an `N(mu, sigma)` distribution **below** a threshold, `hi`"""
+    return dp.normal_cdf(hi, mu, sigma)
 
 
 def normal_probability_above(lo: float,
