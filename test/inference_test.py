@@ -106,3 +106,25 @@ def test_normal_lower_bound(p, expected, abs_tol):
 )
 def test_normal_two_sided_bounds(probability, expected, abs_tol):
     assert scratch.inference.normal_two_sided_bounds(probability) == pytest.approx(expected, abs=abs_tol)
+
+
+@pytest.mark.parametrize(
+    'x, mu, sigma, expected',
+    [
+        (529.5, 500, 15.8, 0.062),
+        (470.5, 500, 15.8, 0.062)
+    ]
+)
+def test_two_sided_p_value(x, mu, sigma, expected):
+    assert scratch.inference.two_sided_p_value(x, mu, sigma) == pytest.approx(expected, abs=0.001)
+
+
+@pytest.mark.parametrize(
+    'x, mu, sigma, expected',
+    [
+        (524.5, 500, 15.8, 0.061),
+        (526.5, 500, 15.8, 0.047),
+    ]
+)
+def test_upper_p_value(x, mu, sigma, expected):
+    assert scratch.inference.upper_p_value(x, mu, sigma) == pytest.approx(expected, abs=0.001)

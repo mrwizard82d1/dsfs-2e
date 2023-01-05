@@ -88,3 +88,26 @@ def normal_two_sided_bounds(probability: float,
     lower_bound = normal_upper_bound(tail_probability, mu, sigma)
 
     return lower_bound, upper_bound
+
+
+def two_sided_p_value(x: float,
+                      mu: float = 0,
+                      sigma: float = 1) -> float:
+    """
+    How likely are we to see a value at least as extreme as x (in either
+    direction) if your values are from an `N(mu, sigma)` distribution?
+    """
+
+    # If x is above the mean
+    if x >= mu:
+        # The tail is everything greater than `x`
+        return 2 * normal_probability_above(x, mu, sigma)
+
+    else:
+        # x is less than the mean, so the tail is everything **less** than `x`
+        return 2 * normal_probability_below(x, mu, sigma)
+
+
+# Alternative "definitions"
+upper_p_value = normal_probability_above
+lower_p_value = normal_probability_below
